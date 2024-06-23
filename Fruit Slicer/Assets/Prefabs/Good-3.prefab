@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6004314680345255704}
   - component: {fileID: 880339793616406092}
   - component: {fileID: 529924676904642755}
+  - component: {fileID: -5967841221001732173}
   m_Layer: 0
   m_Name: Good-3
   m_TagString: Untagged
@@ -127,8 +128,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a42e730d1d40a04db4c899204a9ca82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 20
+  points: 25
   scaleRange: {x: 2, y: 4}
   horizontalSpread: 4
   torqueSpread: 10
   forceRange: {x: 12, y: 18}
+--- !u!114 &-5967841221001732173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5873700366887667469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37923bd3fdf0b07459e209698b844290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionParticle: {fileID: 2478549635105912040, guid: ec46c8c4a3cbc429382ee48bd9169b45, type: 3}

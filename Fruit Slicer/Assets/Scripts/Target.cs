@@ -108,8 +108,7 @@ public class Target : MonoBehaviour
     {
         ApplyScore(points);
 
-
-        Destroy(gameObject);
+        ExplodeTarget();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -123,6 +122,14 @@ public class Target : MonoBehaviour
 
 
         Destroy(gameObject);
+    }
+
+    private void ExplodeTarget()
+    {
+        Destroy(gameObject);
+
+        Explosion explosion = GetComponent<Explosion>();
+        explosion.Explode();
     }
 
     private void ApplyScore(int points)
