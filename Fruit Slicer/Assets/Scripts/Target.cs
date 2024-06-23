@@ -5,46 +5,80 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Target : MonoBehaviour
 {
-    
+    // -------------------------------------------------------------------------
+    // Parameters
+    // -------------------------------------------------------------------------
+
+    #region Parameters 
+
     Rigidbody rb;
     Vector2 startPosition = new Vector3(0, -4f);
     [SerializeField] float horizontalSpread = 4f;
 
     [SerializeField] float torqueSpread = 10f;
-    [SerializeField] Vector2 forceSpread = new Vector2(12,19);
-    float verticalForce = 1f;
-    Vector3 torqueForce;
+    [SerializeField] Vector2 forceSpread = new Vector2(12, 18);
+
+    #endregion
 
 
-    // Start is called before the first frame update
-    void Start()
+    // -------------------------------------------------------------------------
+    // Private Methods
+    // -------------------------------------------------------------------------
+
+    #region Private Methods
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
+        // Force 
 
-        // Vertical force 
-
-        verticalForce = Random.Range(forceSpread.x, forceSpread.y);
-        rb.AddForce(Vector3.up * verticalForce, ForceMode.Impulse);
-
-        
-        // Torque 
-
-        torqueForce = new Vector3(
-            Random.Range(-torqueSpread, torqueSpread), 
-            Random.Range(-torqueSpread, torqueSpread), 
-            Random.Range(-torqueSpread, torqueSpread)
-            );
-
-        rb.AddTorque(torqueForce, ForceMode.Impulse);
-
+        ConfigureForces();
 
         // Position
 
-        startPosition.x = Random.Range(-horizontalSpread, horizontalSpread);
+        ConfigurePosition();
+    }
 
+
+    private void ConfigurePosition()
+    {
+        startPosition.x = RandomPositionX(horizontalSpread);
         transform.position = startPosition;
     }
 
-   
+    private void ConfigureForces()
+    {
+        // Vertical Force
+
+        rb.AddForce(Vector3.up * RandomForce(forceSpread.x, forceSpread.y), ForceMode.Impulse);
+
+
+        // Torque 
+
+        rb.AddTorque(RandomRotation(torqueSpread), ForceMode.Impulse);
+    }
+
+
+    private float RandomPositionX(float spread)
+    {
+        return Random.Range(-spread, spread);
+    }
+
+    private float RandomForce(float min, float max)
+    {
+        return Random.Range(min, max);
+    }
+
+    private Vector3 RandomRotation(float spread)
+    {
+        return new Vector3(
+                    Random.Range(-spread, spread),
+                    Random.Range(-spread, spread),
+                    Random.Range(-spread, spread)
+                    );
+    }
+
+    #endregion
+
 }
