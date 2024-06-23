@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class GameManager : MonoBehaviour
 
     #region Parameters 
 
+    [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] List<GameObject> targetPrefabs;
     [SerializeField] float spawnRate = 1f;
+
+    float score = 0;
 
     #endregion
 
@@ -25,6 +29,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(SpawnTargets(spawnRate));
+        UpdateScoreUI();
     }
 
 
@@ -39,7 +44,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void UpdateScoreUI()
+    {
+        scoreText.text = "Score : " + score.ToString();
+    }
+
     #endregion
 
+
+    // -------------------------------------------------------------------------
+    // Public Methods
+    // -------------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void AddScore(int points = 1)
+    {
+        score += points;
+        UpdateScoreUI();
+    }
+
+    #endregion
 
 }

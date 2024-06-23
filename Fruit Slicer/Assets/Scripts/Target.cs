@@ -11,12 +11,22 @@ public class Target : MonoBehaviour
 
     #region Parameters 
 
+    [Header("Main Settings")]
+    [Space]
+
+    [SerializeField] int points = 1;
+
+    [Space]
+    [Header("Spawn Settings")]
+    [Space]
+    
+    [SerializeField] Vector2 scaleRange = new Vector2(2, 3.5f);
+    [SerializeField] float horizontalSpread = 4f;
+    [SerializeField] float torqueSpread = 10f;
+    [SerializeField] Vector2 forceRange = new Vector2(12, 18);
+
     Rigidbody rb;
     Vector2 startPosition = new Vector3(0, -4f);
-    [SerializeField] float horizontalSpread = 4f;
-
-    [SerializeField] float torqueSpread = 10f;
-    [SerializeField] Vector2 forceSpread = new Vector2(12, 18);
 
     #endregion
 
@@ -31,6 +41,10 @@ public class Target : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
+        // Scale 
+
+        ConfigureScale();
+
         // Force 
 
         ConfigureForces();
@@ -40,6 +54,10 @@ public class Target : MonoBehaviour
         ConfigurePosition();
     }
 
+    private void ConfigureScale()
+    {
+        transform.localScale = RandomScale(scaleRange.x, scaleRange.y);
+    }
 
     private void ConfigurePosition()
     {
@@ -51,7 +69,7 @@ public class Target : MonoBehaviour
     {
         // Vertical Force
 
-        rb.AddForce(Vector3.up * RandomForce(forceSpread.x, forceSpread.y), ForceMode.Impulse);
+        rb.AddForce(Vector3.up * RandomForce(forceRange.x, forceRange.y), ForceMode.Impulse);
 
 
         // Torque 
@@ -59,6 +77,12 @@ public class Target : MonoBehaviour
         rb.AddTorque(RandomRotation(torqueSpread), ForceMode.Impulse);
     }
 
+
+    private Vector3 RandomScale(float min, float max)
+    {
+        float randomScale = Random.Range(min, max);
+        return new Vector3(randomScale, randomScale, randomScale);
+    }
 
     private float RandomPositionX(float spread)
     {
@@ -78,6 +102,35 @@ public class Target : MonoBehaviour
                     Random.Range(-spread, spread)
                     );
     }
+
+
+    private void OnMouseDown()
+    {
+        ApplyScore(points);
+
+
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check negative values for bad props
+
+        if (points > 0)
+        {
+            ApplyScore(-points);
+        }
+
+
+        Destroy(gameObject);
+    }
+
+    private void ApplyScore(int points)
+    {
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        gameManager.AddScore(points);
+    }
+
 
     #endregion
 
