@@ -12,22 +12,32 @@ public class GameManager : MonoBehaviour
 
     #region Parameters 
 
+    [Header("UI Settings")]
+    [Space]
+
     [SerializeField] GameObject gameStartPanel;
     [SerializeField] GameObject gameOverPanel;
 
+    [Space]
+
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI livesText;
+
+
+    [Space]
+    [Header("Game Settings")]
+    [Space]
 
     [SerializeField] List<GameObject> targetPrefabs;
     [SerializeField] float spawnRate = 1.5f;
 
     int lives = 6;
     float score = 0;
+    public bool isGameActive = false;
+
+    PauseManager pauseManager;
 
     #endregion
-
-    public bool isGameActive;
-
 
     // -------------------------------------------------------------------------
     // Private Methods
@@ -35,17 +45,43 @@ public class GameManager : MonoBehaviour
 
     #region Private Methods 
 
+    private void Start()
+    {
+        pauseManager = FindObjectOfType<PauseManager>();
+    }
+
     private void Update()
     {
-        if(lives == 0)
+        if (lives == 0)
         {
             GameOver();
         }
+
+        ManagePause();
+    }
+
+    private void ManagePause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !IsAnyPanelActive())
+        {
+            pauseManager.SwitchPause();
+
+            isGameActive = pauseManager.IsPaused() ? false : true;
+        }
+    }
+
+    private bool IsAnyPanelActive()
+    {
+        if(gameStartPanel.activeInHierarchy || gameOverPanel.activeInHierarchy)
+        {
+            return true;
+        }
+        return false;
     }
 
     IEnumerator SpawnTargets(float spawnRate)
     {
-        while(isGameActive)
+        while (isGameActive)
         {
             int targetIndex = Random.Range(0, targetPrefabs.Count);
             Instantiate(targetPrefabs[targetIndex]);
@@ -77,7 +113,7 @@ public class GameManager : MonoBehaviour
     {
         score += points;
 
-        if(score < 0)
+        if (score < 0)
         {
             score = 0;
         }
