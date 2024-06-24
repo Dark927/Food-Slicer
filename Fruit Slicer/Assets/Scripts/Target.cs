@@ -27,6 +27,7 @@ public class Target : MonoBehaviour
 
     Rigidbody rb;
     Vector2 startPosition = new Vector3(0, -4f);
+    GameManager gameManager;
 
     #endregion
 
@@ -40,6 +41,7 @@ public class Target : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        gameManager = FindObjectOfType<GameManager>();
 
         // Scale 
 
@@ -106,20 +108,36 @@ public class Target : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (!gameManager.isGameActive)
+        {
+            return;
+        }
+
+
         ApplyScore(points);
+
+        if(points < 0)
+        {
+
+            gameManager.GameOver();
+        }
 
         ExplodeTarget();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!gameManager.isGameActive)
+        {
+            return;
+        }
+
         // Check negative values for bad props
 
         if (points > 0)
         {
             ApplyScore(-points);
         }
-
 
         Destroy(gameObject);
     }
@@ -134,7 +152,6 @@ public class Target : MonoBehaviour
 
     private void ApplyScore(int points)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
         gameManager.AddScore(points);
     }
 

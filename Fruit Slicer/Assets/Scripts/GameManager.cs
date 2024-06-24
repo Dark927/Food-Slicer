@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     #region Parameters 
 
+    [SerializeField] GameObject gameOverPanel;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] List<GameObject> targetPrefabs;
     [SerializeField] float spawnRate = 1f;
@@ -18,6 +20,8 @@ public class GameManager : MonoBehaviour
     float score = 0;
 
     #endregion
+
+    public bool isGameActive;
 
 
     // -------------------------------------------------------------------------
@@ -30,12 +34,14 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(SpawnTargets(spawnRate));
         UpdateScoreUI();
+
+        isGameActive = true;
     }
 
 
     IEnumerator SpawnTargets(float spawnRate)
     {
-        while(true)
+        while(isGameActive)
         {
             int targetIndex = Random.Range(0, targetPrefabs.Count);
             Instantiate(targetPrefabs[targetIndex]);
@@ -61,7 +67,25 @@ public class GameManager : MonoBehaviour
     public void AddScore(int points = 1)
     {
         score += points;
+
+        if(score < 0)
+        {
+            score = 0;
+        }
+
         UpdateScoreUI();
+    }
+
+    public void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+        isGameActive = false;
+    }
+
+    public void RestartGame()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
     #endregion
