@@ -12,10 +12,12 @@ public class GameManager : MonoBehaviour
 
     #region Parameters 
 
+    [SerializeField] GameObject gameStartPanel;
     [SerializeField] GameObject gameOverPanel;
+
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] List<GameObject> targetPrefabs;
-    [SerializeField] float spawnRate = 1f;
+    [SerializeField] float spawnRate = 1.5f;
 
     float score = 0;
 
@@ -29,16 +31,6 @@ public class GameManager : MonoBehaviour
     // -------------------------------------------------------------------------
 
     #region Private Methods 
-
-    private void Start()
-    {
-        StartCoroutine(SpawnTargets(spawnRate));
-        UpdateScoreUI();
-
-        isGameActive = true;
-    }
-
-
     IEnumerator SpawnTargets(float spawnRate)
     {
         while(isGameActive)
@@ -86,6 +78,17 @@ public class GameManager : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
+    }
+
+    public void StartGame(int difficulty)
+    {
+        spawnRate /= difficulty;
+
+        gameStartPanel.SetActive(false);
+
+        isGameActive = true;
+        StartCoroutine(SpawnTargets(spawnRate));
+        UpdateScoreUI();
     }
 
     #endregion
