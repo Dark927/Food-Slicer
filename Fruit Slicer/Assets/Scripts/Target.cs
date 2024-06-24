@@ -25,6 +25,8 @@ public class Target : MonoBehaviour
     [SerializeField] float torqueSpread = 10f;
     [SerializeField] Vector2 forceRange = new Vector2(12, 15);
 
+    bool isCut = false;
+
     Rigidbody rb;
     Vector2 startPosition = new Vector3(0, -2f);
     GameManager gameManager;
@@ -106,7 +108,7 @@ public class Target : MonoBehaviour
     }
 
 
-    private void OnMouseDown()
+    private void OnCollisionEnter(Collision collision)
     {
         if (!gameManager.isGameActive)
         {
@@ -114,19 +116,18 @@ public class Target : MonoBehaviour
         }
 
 
-        ApplyScore(points);
-
-        if (points < 0)
-        {
-            gameManager.CutLives();
-        }
-
-        ExplodeTarget();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!gameManager.isGameActive)
+        {
+            return;
+        }
+
+        BladeCut(other);
+
+        if(isCut)
         {
             return;
         }
@@ -141,6 +142,24 @@ public class Target : MonoBehaviour
 
         PlayAudioEffect(true);
         Destroy(gameObject);
+    }
+
+    private void BladeCut(Collider other)
+    {
+        Blade blade = other.GetComponent<Blade>();
+
+        if (blade != null)
+        {
+            ApplyScore(points);
+
+            if (points < 0)
+            {
+                gameManager.CutLives();
+            }
+
+            isCut = true;
+            ExplodeTarget();
+        }
     }
 
     private void ExplodeTarget()
