@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5905840786875476292}
   - component: {fileID: 5390522648842511590}
   - component: {fileID: 7761156697336273427}
+  - component: {fileID: 7846048022412679081}
   m_Layer: 0
   m_Name: Good-1
   m_TagString: Untagged
@@ -132,7 +133,7 @@ MonoBehaviour:
   scaleRange: {x: 2, y: 3}
   horizontalSpread: 4
   torqueSpread: 10
-  forceRange: {x: 12, y: 18}
+  forceRange: {x: 12, y: 15}
 --- !u!114 &7761156697336273427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +147,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionParticle: {fileID: 2088871590894813759, guid: 745208c9d6e104225bd99e1ab894e3bb, type: 3}
+--- !u!114 &7846048022412679081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7961669041880119834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb516d42b5fc7241bc275839d41826d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchSound: {fileID: 8300000, guid: aa3c4415e1bb3a443883e35af7b4a9a0, type: 3}
+  fallDownSound: {fileID: 8300000, guid: 37549b8b11fe14a5faf0e30d4a97f159, type: 3}

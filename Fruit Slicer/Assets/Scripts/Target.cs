@@ -19,14 +19,14 @@ public class Target : MonoBehaviour
     [Space]
     [Header("Spawn Settings")]
     [Space]
-    
+
     [SerializeField] Vector2 scaleRange = new Vector2(2, 3.5f);
     [SerializeField] float horizontalSpread = 4f;
     [SerializeField] float torqueSpread = 10f;
-    [SerializeField] Vector2 forceRange = new Vector2(12, 18);
+    [SerializeField] Vector2 forceRange = new Vector2(12, 15);
 
     Rigidbody rb;
-    Vector2 startPosition = new Vector3(0, -4f);
+    Vector2 startPosition = new Vector3(0, -2f);
     GameManager gameManager;
 
     #endregion
@@ -116,10 +116,9 @@ public class Target : MonoBehaviour
 
         ApplyScore(points);
 
-        if(points < 0)
+        if (points < 0)
         {
-
-            gameManager.GameOver();
+            gameManager.CutLives();
         }
 
         ExplodeTarget();
@@ -127,7 +126,7 @@ public class Target : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!gameManager.isGameActive)
+        if (!gameManager.isGameActive)
         {
             return;
         }
@@ -137,8 +136,10 @@ public class Target : MonoBehaviour
         if (points > 0)
         {
             ApplyScore(-points);
+            gameManager.CutLives();
         }
 
+        PlayAudioEffect(true);
         Destroy(gameObject);
     }
 
@@ -147,7 +148,26 @@ public class Target : MonoBehaviour
         Destroy(gameObject);
 
         Explosion explosion = GetComponent<Explosion>();
+
+        PlayAudioEffect();
         explosion.Explode();
+    }
+
+    private void PlayAudioEffect(bool isFallDown = false)
+    {
+        AudioEffect audioEffect = GetComponent<AudioEffect>();
+
+        if (audioEffect != null)
+        {
+            if (!isFallDown)
+            {
+                audioEffect.PlayTouchSound();
+            }
+            else
+            {
+                audioEffect.PlayFallDownSound();
+            }
+        }
     }
 
     private void ApplyScore(int points)
